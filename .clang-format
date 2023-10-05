@@ -1,4 +1,4 @@
-BasedOnStyle: Chromium
+BasedOnStyle: LLVM
 IndentWidth: 8
 ColumnLimit: 120
 BinPackArguments: false

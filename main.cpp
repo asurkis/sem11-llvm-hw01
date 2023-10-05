@@ -1,12 +1,12 @@
+#include "game.h"
 #include <SDL.h>
 #include <vector>
-#include "game.h"
 
 namespace {
 
-constexpr ssize_t BOARD_WIDTH = 480;
-constexpr ssize_t BOARD_HEIGHT = 270;
-constexpr ssize_t BOARD_SIZE = BOARD_WIDTH * BOARD_HEIGHT;
+constexpr int BOARD_WIDTH = 64;
+constexpr int BOARD_HEIGHT = 36;
+constexpr int BOARD_SIZE = BOARD_WIDTH * BOARD_HEIGHT;
 // vector<bool> does not provide actual array
 std::vector<char> board(BOARD_SIZE, 0);
 std::vector<char> board_next(BOARD_SIZE, 0);
@@ -20,27 +20,26 @@ void init_board() {
         board[2 + 2 * BOARD_WIDTH] = 1;
 }
 
-SDL_Window* window = nullptr;
-SDL_Surface* window_surface = nullptr;
+SDL_Window *window = nullptr;
 bool is_running = true;
 
 void process_events() {
         SDL_Event event;
         while (SDL_PollEvent(&event)) {
                 switch (event.type) {
-                        case SDL_QUIT:
+                case SDL_QUIT:
+                        is_running = false;
+                        break;
+                case SDL_KEYDOWN:
+                        switch (event.key.keysym.scancode) {
+                        case SDL_SCANCODE_ESCAPE:
                                 is_running = false;
                                 break;
-                        case SDL_KEYDOWN:
-                                switch (event.key.keysym.scancode) {
-                                        case SDL_SCANCODE_ESCAPE:
-                                                is_running = false;
-                                                break;
-                                        default:
-                                                break;
-                                }
                         default:
                                 break;
+                        }
+                default:
+                        break;
                 }
         }
 }
@@ -60,10 +59,11 @@ void main_loop_iteration() {
         fill_next_state(board.data(), board_next.data(), BOARD_WIDTH, BOARD_HEIGHT);
         board.swap(board_next);
 
+        SDL_Surface *window_surface = SDL_GetWindowSurface(window);
         SDL_LockSurface(window_surface);
-        const SDL_PixelFormat* format = window_surface->format;
+        const SDL_PixelFormat *format = window_surface->format;
         int stride = format->BytesPerPixel;
-        auto pixels = static_cast<unsigned char*>(window_surface->pixels);
+        auto pixels = static_cast<unsigned char *>(window_surface->pixels);
         int w = 0;
         int h = 0;
         SDL_GetWindowSize(window, &w, &h);
@@ -73,9 +73,9 @@ void main_loop_iteration() {
         SDL_UpdateWindowSurface(window);
 }
 
-}  // namespace
+} // namespace
 
-int main(int, char*[]) {
+int main(int, char *[]) {
         SDL_Init(SDL_INIT_EVENTS | SDL_INIT_VIDEO);
         window = SDL_CreateWindow("Main window",
                                   SDL_WINDOWPOS_CENTERED,
@@ -83,7 +83,6 @@ int main(int, char*[]) {
                                   1280,
                                   720,
                                   SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI);
-        window_surface = SDL_GetWindowSurface(window);
 
         init_board();
 
