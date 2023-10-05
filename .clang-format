@@ -1,5 +1,6 @@
-BasedOnStyle: LLVM
+BasedOnStyle: Chromium
 IndentWidth: 8
+ColumnLimit: 120
 BinPackArguments: false
 BinPackParameters: false
 PackConstructorInitializers: Never
