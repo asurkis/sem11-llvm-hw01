@@ -1,6 +1,5 @@
 #include "sim.h"
 #include <stdbool.h>
-#include <stdio.h>
 
 int BUF[2][SIM_X_SIZE * SIM_Y_SIZE];
 int *board = BUF[0];
