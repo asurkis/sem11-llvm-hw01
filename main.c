@@ -1,5 +1,4 @@
 #include "sim.h"
-#include <stdbool.h>
 
 int BUF[2][SIM_X_SIZE * SIM_Y_SIZE];
 int *board = BUF[0];
@@ -11,8 +10,8 @@ static int calcNeighbors(int row, int col) {
                 for (int d_col = -1; d_col <= 1; ++d_col) {
                         int rr = row + d_row;
                         int cc = col + d_col;
-                        bool fits_v = 0 <= rr && rr < SIM_Y_SIZE;
-                        bool fits_h = 0 <= cc && cc < SIM_X_SIZE;
+                        int fits_v = 0 <= rr && rr < SIM_Y_SIZE;
+                        int fits_h = 0 <= cc && cc < SIM_X_SIZE;
                         if (fits_v && fits_h) {
                                 result += board[rr * SIM_X_SIZE + cc];
                         }

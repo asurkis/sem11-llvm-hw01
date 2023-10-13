@@ -1,8 +1,6 @@
 #ifndef SIM_H
 #define SIM_H
 
-#include <stdbool.h>
-
 #define SIM_X_SIZE 64
 #define SIM_Y_SIZE 36
 
@@ -12,7 +10,7 @@ extern "C" {
 
 extern void simBegin();
 extern void simEnd();
-extern bool simShouldContinue();
+extern int simShouldContinue();
 
 extern void simSetPixel(int x, int y, int rgb);
 extern void simFlush();

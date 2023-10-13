@@ -1,23 +1,22 @@
 #include "sim.h"
 #include <SDL.h>
 #include <SDL2/SDL_timer.h>
-#include <stdbool.h>
 #include <unistd.h>
 
 static SDL_Window *window = NULL;
-static bool shouldContinue = true;
+static int shouldContinue = 1;
 
 static void processEvents() {
         SDL_Event event;
         while (SDL_PollEvent(&event)) {
                 switch (event.type) {
                 case SDL_QUIT:
-                        shouldContinue = false;
+                        shouldContinue = 0;
                         break;
                 case SDL_KEYDOWN:
                         switch (event.key.keysym.scancode) {
                         case SDL_SCANCODE_ESCAPE:
-                                shouldContinue = false;
+                                shouldContinue = 0;
                                 break;
                         default:
                                 break;
@@ -44,7 +43,7 @@ void simEnd() {
         SDL_Quit();
 }
 
-bool simShouldContinue() { return shouldContinue; }
+int simShouldContinue() { return shouldContinue; }
 
 SDL_Surface *windowSurface = NULL;
 int w = 0;

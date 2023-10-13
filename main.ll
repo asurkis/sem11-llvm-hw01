@@ -20,29 +20,30 @@ define dso_local i32 @main(i32 noundef %0, ptr noundef %1) #0 {
   call void @initBoard()
   br label %7
 
-7:                                                ; preds = %9, %2
-  %8 = call zeroext i1 (...) @simShouldContinue()
-  br i1 %8, label %9, label %13
+7:                                                ; preds = %10, %2
+  %8 = call i32 (...) @simShouldContinue()
+  %9 = icmp ne i32 %8, 0
+  br i1 %9, label %10, label %14
 
-9:                                                ; preds = %7
+10:                                               ; preds = %7
   call void @fillNextState()
-  %10 = load ptr, ptr @board, align 8
-  store ptr %10, ptr %6, align 8
-  %11 = load ptr, ptr @board_next, align 8
-  store ptr %11, ptr @board, align 8
-  %12 = load ptr, ptr %6, align 8
-  store ptr %12, ptr @board_next, align 8
+  %11 = load ptr, ptr @board, align 8
+  store ptr %11, ptr %6, align 8
+  %12 = load ptr, ptr @board_next, align 8
+  store ptr %12, ptr @board, align 8
+  %13 = load ptr, ptr %6, align 8
+  store ptr %13, ptr @board_next, align 8
   call void (...) @simFlush()
   br label %7, !llvm.loop !6
 
-13:                                               ; preds = %7
+14:                                               ; preds = %7
   call void (...) @simEnd()
   ret i32 0
 }
 
 declare void @simBegin(...) #1
 
-declare zeroext i1 @simShouldContinue(...) #1
+declare i32 @simShouldContinue(...) #1
 
 declare void @simFlush(...) #1
 
@@ -189,8 +190,8 @@ define internal i32 @calcNeighbors(i32 noundef %0, i32 noundef %1) #0 {
   %7 = alloca i32, align 4
   %8 = alloca i32, align 4
   %9 = alloca i32, align 4
-  %10 = alloca i8, align 1
-  %11 = alloca i8, align 1
+  %10 = alloca i32, align 4
+  %11 = alloca i32, align 4
   store i32 %0, ptr %3, align 4
   store i32 %1, ptr %4, align 4
   store i32 0, ptr %5, align 4
@@ -231,8 +232,8 @@ define internal i32 @calcNeighbors(i32 noundef %0, i32 noundef %1) #0 {
 
 31:                                               ; preds = %28, %19
   %32 = phi i1 [ false, %19 ], [ %30, %28 ]
-  %33 = zext i1 %32 to i8
-  store i8 %33, ptr %10, align 1
+  %33 = zext i1 %32 to i32
+  store i32 %33, ptr %10, align 4
   %34 = load i32, ptr %9, align 4
   %35 = icmp sle i32 0, %34
   br i1 %35, label %36, label %39
@@ -244,15 +245,15 @@ define internal i32 @calcNeighbors(i32 noundef %0, i32 noundef %1) #0 {
 
 39:                                               ; preds = %36, %31
   %40 = phi i1 [ false, %31 ], [ %38, %36 ]
-  %41 = zext i1 %40 to i8
-  store i8 %41, ptr %11, align 1
-  %42 = load i8, ptr %10, align 1
-  %43 = trunc i8 %42 to i1
+  %41 = zext i1 %40 to i32
+  store i32 %41, ptr %11, align 4
+  %42 = load i32, ptr %10, align 4
+  %43 = icmp ne i32 %42, 0
   br i1 %43, label %44, label %58
 
 44:                                               ; preds = %39
-  %45 = load i8, ptr %11, align 1
-  %46 = trunc i8 %45 to i1
+  %45 = load i32, ptr %11, align 4
+  %46 = icmp ne i32 %45, 0
   br i1 %46, label %47, label %58
 
 47:                                               ; preds = %44
